@@ -6,6 +6,7 @@ export default function ColorBox({ colourName, hexCode }) {
     backgroundColor: hexCode,
   };
 
+  // Decides whether the text should be black or white depending on the background colour
   const textColour = {
     color:
       parseInt(hexCode.replace('#', ''), 16) > 0xffffff / 1.1
