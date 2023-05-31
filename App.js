@@ -1,24 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, FlatList } from 'react-native';
+import ColorBox from './ColorBox';
+
+const COLORS = [
+  { colorName: 'Base03', hexCode: '#002b36' },
+  { colorName: 'Base02', hexCode: '#073642' },
+  { colorName: 'Base01', hexCode: '#586e75' },
+  { colorName: 'Base00', hexCode: '#657b83' },
+  { colorName: 'Base0', hexCode: '#839496' },
+  { colorName: 'Base1', hexCode: '#93a1a1' },
+  { colorName: 'Base2', hexCode: '#eee8d5' },
+  { colorName: 'Base3', hexCode: '#fdf6e3' },
+  { colorName: 'Yellow', hexCode: '#b58900' },
+  { colorName: 'Orange', hexCode: '#cb4b16' },
+  { colorName: 'Red', hexCode: '#dc322f' },
+  { colorName: 'Magenta', hexCode: '#d33682' },
+  { colorName: 'Violet', hexCode: '#6c71c4' },
+  { colorName: 'Blue', hexCode: '#268bd2' },
+  { colorName: 'Cyan', hexCode: '#2aa198' },
+  { colorName: 'Green', hexCode: '#859900' },
+];
 
 export default function App() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.heading}>Here are some buttons:</Text>
-        <View style={[styles.button, styles.cyan]}>
-          <Text style={styles.buttonText}>Cyan</Text>
-        </View>
-        <View style={[styles.button, styles.blue]}>
-          <Text style={styles.buttonText}>Blue</Text>
-        </View>
-        <View style={[styles.button, styles.magenta]}>
-          <Text style={styles.buttonText}>Magenta</Text>
-        </View>
-        <View style={[styles.button, styles.orange]}>
-          <Text style={styles.buttonText}>Orange</Text>
-        </View>
-      </View>
+      <FlatList
+        style={styles.container}
+        data={COLORS}
+        keyExtractor={(item) => item.hexCode}
+        renderItem={({ item }) => (
+          <ColorBox colourName={item.colorName} hexCode={item.hexCode} />
+        )}
+        ListHeaderComponent={<Text style={styles.heading}>Colour Boxes</Text>}
+      />
     </SafeAreaView>
   );
 }
@@ -30,37 +44,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'top',
+    // alignItems: 'center',
+    // justifyContent: 'top',
+    paddingHorizontal: 24,
+    gap: 20,
     paddingTop: 48,
-    gap: 12,
   },
   heading: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  button: {
-    padding: 20,
-    borderRadius: 5,
-    width: 320,
-    alignItems: 'center',
-    color: 'pink',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  cyan: {
-    backgroundColor: '#2aa198',
-  },
-  blue: {
-    backgroundColor: '#268bd2',
-  },
-  magenta: {
-    backgroundColor: '#d33682',
-  },
-  orange: {
-    backgroundColor: '#cb4b16',
+    marginBottom: 24,
+    textAlign: 'center',
   },
 });
