@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'pink',
     marginBottom: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
   },
   buttonText: {
     fontWeight: 'bold',

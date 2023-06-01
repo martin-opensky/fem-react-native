@@ -13,7 +13,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: 'Embrace' }}
+          options={{ title: 'Welcome' }}
         />
         <Stack.Screen
           name="ColourPalette"

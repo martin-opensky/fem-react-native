@@ -3,17 +3,17 @@ import { StyleSheet, Text, FlatList } from 'react-native';
 import ColorBox from '../components/ColorBox';
 
 export default function ColourPalette({ route }) {
+  const { name, colours } = route.params;
+
   return (
     <FlatList
       style={styles.container}
-      data={route.params.colours}
+      data={colours}
       keyExtractor={(item) => item.hexCode}
       renderItem={({ item }) => (
         <ColorBox colourName={item.colorName} hexCode={item.hexCode} />
       )}
-      ListHeaderComponent={
-        <Text style={styles.heading}>{route.params.name}</Text>
-      }
+      ListHeaderComponent={<Text style={styles.heading}>{name}</Text>}
     />
   );
 }

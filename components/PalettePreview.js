@@ -2,21 +2,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 
-export default function ColorSchemePreview({ navigation, name, colours }) {
+export default function ColorSchemePreview({ onPress, name, colours }) {
   const previewColours = colours.slice(0, 5);
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('ColourPalette', {
-            name,
-            colours,
-          })
-        }
-      >
-        <Text style={styles.subHeading}>{name}</Text>
-      </TouchableOpacity>
       <View style={styles.previewContainer}>
         <FlatList
           data={previewColours}
@@ -27,6 +17,11 @@ export default function ColorSchemePreview({ navigation, name, colours }) {
             />
           )}
           numColumns={5}
+          ListHeaderComponent={
+            <TouchableOpacity onPress={onPress}>
+              <Text style={styles.subHeading}>{name}</Text>
+            </TouchableOpacity>
+          }
         />
       </View>
     </View>
@@ -37,16 +32,17 @@ const styles = StyleSheet.create({
   subHeading: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 8,
     textAlign: 'left',
   },
   previewContainer: {
     flexDirection: 'row',
+    marginBottom: 16,
   },
   previewColour: {
-    height: 30,
-    width: 30,
-    marginRight: 10,
+    height: 32,
+    width: 32,
+    marginRight: 8,
     borderColor: 'black',
     borderWidth: 1,
   },

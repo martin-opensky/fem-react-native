@@ -1,28 +1,54 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import ColorSchemePreview from '../components/ColorSchemePreview';
+import React, { useState, useCallback, useEffect } from 'react';
+import { StyleSheet, View, RefreshControl } from 'react-native';
+import PalettePreview from '../components/PalettePreview';
+import { FlatList } from 'react-native-gesture-handler';
+
+const URL = 'https://color-palette-api.kadikraman.vercel.app/palettes';
 
 export default function Home({ navigation }) {
+  const [palettes, setPalettes] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const getPalettes = useCallback(async () => {
+    const response = await fetch(URL);
+    if (response.ok) {
+      const paletteResponse = await response.json();
+      setPalettes(paletteResponse);
+    }
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await getPalettes();
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 250);
+  }, [getPalettes]);
+
+  useEffect(() => {
+    getPalettes();
+  }, [getPalettes]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Welcome</Text>
-
-      <ColorSchemePreview
-        navigation={navigation}
-        name="Solarised"
-        colours={SOLARISED}
-      />
-
-      <ColorSchemePreview
-        navigation={navigation}
-        name="Rainbow"
-        colours={RAINBOW}
-      />
-
-      <ColorSchemePreview
-        navigation={navigation}
-        name="Frontend Masters"
-        colours={FRONTEND_MASTERS}
+      <FlatList
+        data={palettes}
+        keyExtractor={(item) => item.name}
+        renderItem={({ item }) => (
+          <PalettePreview
+            onPress={() =>
+              navigation.navigate('ColourPalette', {
+                name: item.paletteName,
+                colours: item.colors,
+              })
+            }
+            name={item.paletteName}
+            colours={item.colors}
+          />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        }
       />
     </View>
   );
@@ -34,14 +60,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 24,
     gap: 20,
-    paddingTop: 48,
+    paddingTop: 24,
   },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
+
   subHeading: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -50,6 +71,8 @@ const styles = StyleSheet.create({
   },
 });
 
+/*
+NOT NEEDED WHEN WE HAVE THE API
 const SOLARISED = [
   { colorName: 'Base03', hexCode: '#002b36' },
   { colorName: 'Base02', hexCode: '#073642' },
@@ -84,3 +107,19 @@ const FRONTEND_MASTERS = [
   { colorName: 'White', hexCode: '#ffffff' },
   { colorName: 'Orange', hexCode: '#e66225' },
 ];
+
+const COLOUR_PALETTES = [
+  {
+    name: 'Solarised',
+    colours: SOLARISED,
+  },
+  {
+    name: 'Rainbow',
+    colours: RAINBOW,
+  },
+  {
+    name: 'Frontend Masters',
+    colours: FRONTEND_MASTERS,
+  },
+];
+*/
