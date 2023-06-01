@@ -29,11 +29,15 @@ export default function Home({ navigation }) {
     getPalettes();
   }, [getPalettes]);
 
+  if (!palettes) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={palettes}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.paletteName}
         renderItem={({ item }) => (
           <PalettePreview
             onPress={() =>
