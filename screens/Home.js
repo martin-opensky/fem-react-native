@@ -1,11 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { StyleSheet, View, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  RefreshControl,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import PalettePreview from '../components/PalettePreview';
 import { FlatList } from 'react-native-gesture-handler';
 
 const URL = 'https://color-palette-api.kadikraman.vercel.app/palettes';
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
+  const newColourPalette = route.params?.newColourPalette;
   const [palettes, setPalettes] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -28,6 +35,12 @@ export default function Home({ navigation }) {
   useEffect(() => {
     getPalettes();
   }, [getPalettes]);
+
+  useEffect(() => {
+    if (newColourPalette) {
+      setPalettes((current) => [newColourPalette, ...current]);
+    }
+  }, [newColourPalette]);
 
   if (!palettes) {
     return null;
@@ -53,6 +66,13 @@ export default function Home({ navigation }) {
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
         }
+        ListHeaderComponent={
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AddPaletteModal')}
+          >
+            <Text style={styles.addPaletteText}>Add a colour scheme</Text>
+          </TouchableOpacity>
+        }
       />
     </View>
   );
@@ -71,6 +91,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 12,
+    textAlign: 'left',
+  },
+
+  addPaletteText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'teal',
+    marginBottom: 16,
     textAlign: 'left',
   },
 });
